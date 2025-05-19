@@ -7,6 +7,7 @@
 #include <locale.h>
 
 
+<<<<<<< HEAD
 
 
 void Exibe(TpLista *list){
@@ -17,6 +18,9 @@ void Exibe(TpLista *list){
 	}	
 }
 
+=======
+void Exibe(TpLista *list);
+>>>>>>> 4f920753ca8732d8fe957208e6daf8bf6c497c4d
 
 char SearchContent(char subs[], TpLista **list){ // aqui eu procuro na lista se ja existe a palavra que eu to buscando
 	TpLista *aux;
@@ -143,6 +147,7 @@ void setNo(TpLista *list){
 }
 
 Tree *CriaNo(int cod){
+<<<<<<< HEAD
 	
 	Tree *t = (Tree*)malloc(sizeof(Tree));
 	t->codigo = cod;
@@ -220,6 +225,152 @@ void criaArvoreHuffman(TpLista **list){
 			
 		//pre_ordem((*list)->no);	
 		
+=======
+	
+	Tree *t = (Tree*)malloc(sizeof(Tree));
+	t->codigo = cod;
+	t->esq = NULL;
+	t->dir = NULL;
+	
+	return t;
+}
+
+Tree *CriaNovaTree(int esquerda, int direita){
+	
+	Tree *t = (Tree*)malloc(sizeof(Tree));
+	t->codigo = -1;
+	t->esq = CriaNo(esquerda);
+	//printf("codigo esquerda: %d \t", t->esq->codigo);
+	t->dir = CriaNo(direita);
+	//printf("codigo direita: %d \t", t->dir->codigo);
+
+	
+	return t;
+}
+
+TpLista * CriaNovaLista(int frequencia, int esquerda, int direita){
+	
+	TpLista *lista = (TpLista*)malloc(sizeof(TpLista));
+	lista->frequencia = frequencia;
+	//printf("frequencia: %d \t", lista->frequencia);
+	lista->no = CriaNovaTree(esquerda,direita);
+	//printf("cabeca no: %d \n\n", lista->no->codigo);
+	strcpy(lista->palavra,"");
+	lista->prox = NULL;
+	
+	return lista;
+}
+
+void reposiciona(TpLista **list, TpLista **anterior, TpLista **atual, TpLista **proximo){
+	
+	*anterior = *list;
+	
+	while((*anterior)->prox->prox->prox != NULL){
+		*anterior = (*anterior)-> prox;
+		*atual = (*anterior) -> prox;
+		*proximo = (*atual) -> prox;
+	}
+
+	
+}
+
+void InserirOrd(TpLista **list, TpLista *novo){
+	
+	TpLista *aux = novo;
+	if(*list == NULL){
+		*list = aux;
+	}else{
+		
+		if(aux->frequencia > (*list)->frequencia){
+			aux->prox = *list;
+			*list = aux;
+		}else{
+			TpLista *pos = *list, *ant = NULL;
+			while(pos != NULL && aux->frequencia < pos->frequencia){
+				ant = pos;
+				pos = pos->prox;
+			}
+			if(pos != NULL){
+				aux->prox = pos;
+			}
+			ant->prox = aux;	
+		}
+	}
+	
+}
+
+void criaArvoreHuffman(TpLista **list){
+	
+	TpLista *anterior = NULL, *atual = NULL, *proximo = NULL;
+	reposiciona(&(*list), &anterior,&atual,&proximo);
+	//printf("Anterior: %s \t Atual: %s \t Proximo: %s \n\n\n", anterior->palavra, atual->palavra, proximo -> palavra);
+	
+	while((*list)->prox != NULL){
+		
+		int novaFreq = atual->frequencia + proximo->frequencia;
+		//printf("\nFreq total: %d",novaFreq); getch();
+		TpLista *aux = CriaNovaLista(novaFreq, atual->no->codigo, proximo->no->codigo);
+		anterior->prox = NULL;
+		free(atual);
+		free(proximo);
+		InserirOrd(&(*list),aux);
+		//SortList(&(*list));
+		//Exibe(*list);
+		//printf("\n\n");
+		
+		reposiciona(&(*list), &anterior,&atual,&proximo);
+	}
+	
+}
+
+void pre_ordem(Tree *raiz){
+    if(raiz!=NULL){
+        printf("%d\n", raiz->codigo);
+        pre_ordem(raiz->esq);
+        pre_ordem(raiz->dir);
+    }
+
+}
+
+void criarArqBin(TpLista *list){
+	
+	FILE * ptr = fopen("Tabela.dat", "wb");
+	TpHuff huff;
+	
+	while(list != NULL){
+		
+		huff.simbolo = list->no->codigo;
+		strcpy(huff.palavra, list->palavra);
+		huff.num = ' '; //coloquei vazio por enquanto
+		
+		fwrite(&huff, sizeof(TpHuff), 1, ptr);
+		list = list -> prox;
+	}
+	
+	fclose(ptr);
+}
+
+void exibeArq(){
+	
+	FILE * ptr = fopen("Tabela.dat", "rb");
+	TpHuff huff;
+	
+	fread(&huff, sizeof(TpHuff), 1, ptr);
+	while(!feof(ptr)){
+		printf("Simbolo: %d \t Palavra: %s \t Codigo Huffman: %c\n", huff.simbolo, huff.palavra, huff.num);
+		fread(&huff, sizeof(TpHuff), 1, ptr);
+	}
+	
+	fclose(ptr);
+}
+
+//só pra ver se ta gravando certo
+void Exibe(TpLista *list){
+	
+	while(list!=NULL){
+		printf("Palavra:%s | freq:%d | codigo: %d\n", list->palavra, list->frequencia, list->no->codigo);
+		list= list->prox;
+>>>>>>> 4f920753ca8732d8fe957208e6daf8bf6c497c4d
 	}	
 }
 
@@ -331,8 +482,9 @@ int main(){
 	setlocale(LC_ALL, "Portuguese");
 	TpLista *list= NULL;
 	char text[10000];
-	strcpy(text,"Amar ï¿½ sonhar, sonhar ï¿½ viver, viver ï¿½ curtir, curtir ï¿½ amar. Cada um terï¿½ uma escolha, cada um farï¿½ a escolha, cada um escolhe a sua escolha. Levaremos um tempo para crescer, levaremos um tempo para amadurecer, levaremos um tempo para entender, levaremos um tempo para envelhecer, levaremos um tempo para morrer");
+	strcpy(text,"Amar é sonhar, sonhar é viver, viver é curtir, curtir é amar. Cada um terá uma escolha, cada um fará a escolha, cada um escolhe a sua escolha. Levaremos um tempo para crescer, levaremos um tempo para amadurecer, levaremos um tempo para entender, levaremos um tempo para envelhecer, levaremos um tempo para morrer");
 	BuildList(&list,text);
+<<<<<<< HEAD
 	SortListDesc(&list);
 	setNo(list);
 	Exibe(list);
@@ -342,5 +494,12 @@ int main(){
 	criaArvoreHuffman(&list);
 	exibeHuff(list->no, 0);
 	//pre_ordem(list->no);
+=======
+	SortList(&list);
+	setNo(list);
+	//Exibe(list);
+	criaArvoreHuffman(&list);
+	pre_ordem(list->no);
+>>>>>>> 4f920753ca8732d8fe957208e6daf8bf6c497c4d
 
 }
