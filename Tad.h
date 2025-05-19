@@ -14,7 +14,7 @@ struct TpLista{
 struct TpHuff{ // essa estrutura eu vou usar para buscar no arquivo binario
 	char palavra[30];
 	int simbolo;
-	unsigned char num;
+	char huff[30];
 };
 
 
