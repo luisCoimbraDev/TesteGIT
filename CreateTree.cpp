@@ -331,7 +331,7 @@ int main(){
 	setlocale(LC_ALL, "Portuguese");
 	TpLista *list= NULL;
 	char text[10000];
-	strcpy(text,"Amar é sonhar, sonhar é viver, viver é curtir, curtir é amar. Cada um terá uma escolha, cada um fará a escolha, cada um escolhe a sua escolha. Levaremos um tempo para crescer, levaremos um tempo para amadurecer, levaremos um tempo para entender, levaremos um tempo para envelhecer, levaremos um tempo para morrer");
+	strcpy(text,"Amar ï¿½ sonhar, sonhar ï¿½ viver, viver ï¿½ curtir, curtir ï¿½ amar. Cada um terï¿½ uma escolha, cada um farï¿½ a escolha, cada um escolhe a sua escolha. Levaremos um tempo para crescer, levaremos um tempo para amadurecer, levaremos um tempo para entender, levaremos um tempo para envelhecer, levaremos um tempo para morrer");
 	BuildList(&list,text);
 	SortListDesc(&list);
 	setNo(list);
